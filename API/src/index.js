@@ -2,6 +2,7 @@ const express = require('express');
 /*mongoose vai ser utilizado para fazer a conexão com o banco de dados. */
 const mongoose = require('mongoose');
 const routes = require('./routes');
+const path = require('path');
 const app = express();
 require('dotenv').config();
 
@@ -10,7 +11,7 @@ require('dotenv').config();
 /*const = constante, valor sem alteração*/ 
 
 mongoose.Promise = global.Promise;
-mongoose.connect(`mongodb+srv://${process.env.user_name}:${process.env.user_pass}@cluster0.xo7s2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {
+mongoose.connect(`${process.env.URL_DT}`, {
     useNewUrlParser: true, useUnifiedTopology: true
 }).then( ()=> {
     return console.log("Conectado com sucesso ao mongo!");
@@ -20,7 +21,7 @@ mongoose.connect(`mongodb+srv://${process.env.user_name}:${process.env.user_pass
 
 app.use(express.json());
 app.use(routes);
-
+app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')))
 app.listen(3333, () => {
     return console.log("O servidor está funcionando");
 });
